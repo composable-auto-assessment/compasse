@@ -31,7 +31,9 @@ def setMCQ_1pN(q, type_q):
 		pdf.add_page()
 	pdf.multi_cell(0, 8, qStatement, border, align='L')
 	if 'media' in q:
-		setMedia(q['media']['Media'][0])
+		if ((q["numberOfAnswers"]+1) * 8 + pdf.get_y() + q['media']['Media'][0]['height'] > 287):
+			pdf.add_page()
+			setMedia(q['media']['Media'][0])
 	#accéder aux réponses
 	answers = q['answers']['Answer']
 	for a in answers :
@@ -182,10 +184,7 @@ with open("coordinates.json", "w") as f:
 """
 TODO : 
 	- clean code
-	- revérifier les coordonnées
-	- rajouter coordonnées MTF et marker
+	- rajouter coordonnées marker
 	- rajouter un numéro de page 
 	
 """
-
-
