@@ -3,6 +3,7 @@ import fpdf
 import json
 
 #variables globales
+nb_page = 0
 border = 0
 rect_size = 5
 x_offset = 2
@@ -40,12 +41,10 @@ def setMCQ_1pN(q, type_q):
 		setAnswerMCQ_1pN(a, type_q)
 
 def setMultipleTF(q):
-	#TODO rajouter coordonées dans liste 
 	qStatement = q['qStatement']
 	pdf.cell(0, 10, qStatement, border, 1, align='L')
 	pdf.cell(8, 4, 'T', border, 0, align='C')
 	pdf.cell(8, 4, 'F', border, 1, align='C')
-	#rajouter un for avec toute les questions du multipleTF dedans, genre on parcours la q
 	for mtf in q["mtfs"]["Mtfs"]:
 		x, y = pdf.get_x(), pdf.get_y()
 		pdf.rect(x+x_offset, y+y_offset, rect_size, rect_size)
@@ -55,8 +54,6 @@ def setMultipleTF(q):
 		pdf.set_x(x+x_offset+2*rect_size+5)
 		pdf.cell(0, 7, mtf['answerLabel']	, border, 1, align='L')
 		
-	
-
 def setQuestion(q):
 	"""ecrit la question avec ses medias"""
 	type_q = q['questionType']
@@ -70,7 +67,6 @@ def setQuestion(q):
 	else : 
 		print('Format de question non connu et donc non traité.') 
 
-
 def setEx(ex):
 	"""écrit les informations de début d'exercice"""
 	title = ex['eSText']
@@ -78,20 +74,28 @@ def setEx(ex):
 
 def setMarker():
 	"""met les repère pour le parsing des question"""
-	pdf.image("./marqueur.png", 0, 0, 10)
-	pdf.image("./marqueur.png", 200, 0, 10)
-	pdf.image("./marqueur.png", 0, 287, 10)
-	pdf.image("./marqueur.png", 200, 287, 10)
+	pdf.image("./marqueur.jpg", 5, 5, 5)
+	pdf.image("./marqueur.jpg", 200, 5, 5)
+	pdf.image("./marqueur.jpg", 5, 287, 5)
+	pdf.image("./marqueur.jpg", 200, 287, 5)
+	liste_coordonnees.append(("Marker", ((5, 5), (10, 10)), 0))
+	liste_coordonnees.append(("Marker", ((5, 5), (10, 10)), 1))
+	liste_coordonnees.append(("Marker", ((5, 5), (10, 10)), 2))
+	liste_coordonnees.append(("Marker", ((5, 5), (10, 10)), 3))
+	
 
 def setCopyID(copyID, lenCopyId):
 	"""permet de mettre le code de la copie sous forme de case"""
+	pdf.set_x(pdf.get_x()+10)
 	for i in range(lenCopyId):
 		pdf.rect(pdf.get_x(), rect_size, rect_size, rect_size, style='DF') if copyID[i]=="1" else pdf.rect(pdf.get_x(), rect_size, rect_size, rect_size, style='D')
 		liste_coordonnees.append(("CopyId", ((pdf.get_x(), rect_size), (pdf.get_x()+rect_size, rect_size*2)), i))
 		pdf.set_x(pdf.get_x()+rect_size)
+	pdf.text(pdf.get_x()+5, 9, str(nb_page))
 
 def setBody(copyID, lenCopyId):
 	"""rempli le corps de la copie"""
+	global nb_page
 	#accéder aux exercices
 	exercises = exam['exercises']['Exercise']
 	for ex in exercises:
@@ -102,8 +106,10 @@ def setBody(copyID, lenCopyId):
 			y = pdf.get_y()
 			setQuestion(q)
 			if y > pdf.get_y(): #permet de mettre les marqueurs sur chaque page
+				nb_page = nb_page+1
 				setCopyID(copyID, lenCopyId)
 				setMarker()
+				
 
 def setstudentId(studentId):
 	"""permettra de mettre les cases nécessaire au numéro étudiant"""
@@ -180,11 +186,3 @@ with open("coordinates.json", "w") as f:
 		json.dump(donnee, f)
 		f.write('\n')
 
-
-"""
-TODO : 
-	- clean code
-	- rajouter coordonnées marker
-	- rajouter un numéro de page 
-	
-"""
