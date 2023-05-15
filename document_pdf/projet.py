@@ -13,69 +13,6 @@ exam = None
 pdf = None
 liste_coordonnees = []
 
-def setAnswerMCQ_1pN(a, type_q, id_Ex, id_Q, id_A):
-	"""ecrit les reponses à une question de type 1 parmi N ou QCM"""
-	x, y = pdf.get_x(), pdf.get_y()
-	pdf.rect(x+x_offset, y+y_offset, rect_size, rect_size)
-	liste_coordonnees.append((type_q, x+x_offset, y+y_offset, pdf.get_x()+x_offset+rect_size, pdf.get_y()+y_offset+rect_size, id_Ex, id_Q, id_A))
-	pdf.set_xy(x+10, y) #se décaler pour que la réponse ne soit pas collé à la case
-	answerLabel = a['answerLabel']	
-	pdf.cell(0, 7, answerLabel, border, 1, align='L')
-
-def setMedia(media):
-	"""permet d'afficher le media en lien avec une question"""
-	pdf.image(media['path'], w=media['width'], h=media['height'])
-
-def setMCQ_1pN(q, type_q, id_Ex, id_Q):
-	"""ecrit la question (et le media) pour le type 1 parmi N et QCM"""
-	qStatement = q['qStatement']
-	if ((q["numberOfAnswers"]+1) * 8 + pdf.get_y() > 287): #si on n'a pas toutes les réponses sur la même page on change de page
-		pdf.add_page()
-	pdf.multi_cell(0, 8, qStatement, border, align='L')
-	if 'media' in q:
-		if ((q["numberOfAnswers"]+1) * 8 + pdf.get_y() + q['media'][0]['height'] > 287): #on garde groupé l'image avec les réponses et donc change de page si besoin
-			pdf.add_page()
-			setMedia(q['media'][0])
-	#accéder aux réponses
-	answers = q['answers']
-	for a in answers :
-		id_A = a['answerId']
-		setAnswerMCQ_1pN(a, type_q, id_Ex, id_Q, id_A)
-
-def setMultipleTF(q, id_Ex, id_Q):
-	"""ecrit les question et réponses pour le type multiple true false"""
-	qStatement = q['qStatement']
-	pdf.cell(0, 10, qStatement, border, 1, align='L')
-	pdf.cell(8, 4, 'T', border, 0, align='C')
-	pdf.cell(8, 4, 'F', border, 1, align='C')
-	for mtf in q["answers"]: #pour chaque question du mtf
-		id_A = mtf['answerId']
-		x, y = pdf.get_x(), pdf.get_y()
-		pdf.rect(x+x_offset, y+y_offset, rect_size, rect_size) #2 carrés, 1 pour True et un pour False
-		pdf.rect(x + x_offset + rect_size +2, y+y_offset, rect_size, rect_size)
-		liste_coordonnees.append(("mtf", x+x_offset, y+y_offset, pdf.get_x()+x_offset+rect_size, pdf.get_y()+y_offset+rect_size, id_Ex, id_Q, id_A))
-		liste_coordonnees.append(("mtf", x+x_offset + rect_size +2, y+y_offset, pdf.get_x()+x_offset+rect_size + rect_size +2, pdf.get_y()+y_offset+rect_size, id_Ex, id_Q, id_A))
-		pdf.set_x(x+x_offset+2*rect_size+5)
-		pdf.cell(0, 7, mtf['answerLabel']	, border, 1, align='L')
-		
-def setQuestion(q, id_Ex, id_Q):
-	"""ecrit les questions en fonction de leur type"""
-	type_q = q['questionType']
-	#version trop vieille de python pour case
-	if type_q=='MCQ' or type_q=='1parmiN':
-		setMCQ_1pN(q, type_q, id_Ex, id_Q)
-	elif type_q=='multipleTF' :
-		setMultipleTF(q, id_Ex, id_Q)
-	elif type_q=='tableau' :
-		print('Non réalisé')
-	else : 
-		print('Format de question non connu et donc non traité.') 
-
-def setEx(ex):
-	"""écrit les informations de début d'exercice"""
-	title = ex['eSText']
-	pdf.cell(0, 10, title, border, 1, align='C')
-
 def setMarker():
 	"""met les 4 repères pour le parsing des question"""
 	pdf.image("./marqueur.jpg", 5, 5, 5)
@@ -108,7 +45,73 @@ def setCopyID(copyID, lenCopyId):
 		liste_coordonnees.append(("CopyId", pdf.get_x(), rect_size, pdf.get_x()+rect_size, rect_size*2, "c"+str(i), 0, 0))
 		pdf.set_x(pdf.get_x()+rect_size)
 	set_nb_page(nb_page)
-	
+
+def setAnswerMCQ_1pN(a, type_q, id_Ex, id_Q, id_A):
+	"""ecrit les reponses à une question de type 1 parmi N ou QCM"""
+	x, y = pdf.get_x(), pdf.get_y()
+	pdf.rect(x+x_offset, y+y_offset, rect_size, rect_size)
+	liste_coordonnees.append((type_q, x+x_offset, y+y_offset, pdf.get_x()+x_offset+rect_size, pdf.get_y()+y_offset+rect_size, id_Ex, id_Q, id_A))
+	pdf.set_xy(x+10, y) #se décaler pour que la réponse ne soit pas collé à la case
+	answerLabel = a['answerLabel']	
+	pdf.cell(0, 7, answerLabel, border, 1, align='L')
+
+def setMedia(media):
+	"""permet d'afficher le media en lien avec une question"""
+	pdf.image(media['path'], w=media['width'], h=media['height'])
+
+def setMCQ_1pN(q, type_q, id_Ex, id_Q):
+	"""ecrit la question (et le media) pour le type 1 parmi N et QCM"""
+	new_page = False
+	qStatement = q['qStatement']
+	if ((q["numberOfAnswers"]+1) * 8 + pdf.get_y() > 287): #si on n'a pas toutes les réponses sur la même page on change de page
+		pdf.add_page()
+		new_page = True
+	pdf.multi_cell(0, 8, qStatement, border, align='L')
+	if 'media' in q:
+		if ((q["numberOfAnswers"]+1) * 8 + pdf.get_y() + q['media'][0]['height'] > 287): #on garde groupé l'image avec les réponses et donc change de page si besoin
+			pdf.add_page()
+			new_page = True
+		setMedia(q['media'][0])
+	#accéder aux réponses
+	answers = q['answers']
+	for a in answers :
+		id_A = a['answerId']
+		setAnswerMCQ_1pN(a, type_q, id_Ex, id_Q, id_A)
+	return new_page
+
+def setMultipleTF(q, id_Ex, id_Q):
+	"""ecrit les question et réponses pour le type multiple true false"""
+	qStatement = q['qStatement']
+	pdf.cell(0, 10, qStatement, border, 1, align='L')
+	pdf.cell(8, 4, 'T', border, 0, align='C')
+	pdf.cell(8, 4, 'F', border, 1, align='C')
+	for mtf in q["answers"]: #pour chaque question du mtf
+		id_A = mtf['answerId']
+		x, y = pdf.get_x(), pdf.get_y()
+		pdf.rect(x+x_offset, y+y_offset, rect_size, rect_size) #2 carrés, 1 pour True et un pour False
+		pdf.rect(x + x_offset + rect_size +2, y+y_offset, rect_size, rect_size)
+		liste_coordonnees.append(("mtf", x+x_offset, y+y_offset, pdf.get_x()+x_offset+rect_size, pdf.get_y()+y_offset+rect_size, id_Ex, id_Q, id_A))
+		liste_coordonnees.append(("mtf", x+x_offset + rect_size +2, y+y_offset, pdf.get_x()+x_offset+rect_size + rect_size +2, pdf.get_y()+y_offset+rect_size, id_Ex, id_Q, id_A))
+		pdf.set_x(x+x_offset+2*rect_size+5)
+		pdf.cell(0, 7, mtf['answerLabel']	, border, 1, align='L')
+		
+def setQuestion(q, id_Ex, id_Q):
+	"""ecrit les questions en fonction de leur type"""
+	type_q = q['questionType']
+	#version trop vieille de python pour case
+	if type_q=='MCQ' or type_q=='1parmiN':
+		return setMCQ_1pN(q, type_q, id_Ex, id_Q)
+	elif type_q=='multipleTF' :
+		setMultipleTF(q, id_Ex, id_Q)
+	elif type_q=='tableau' :
+		print('Non réalisé')
+	else : 
+		print('Format de question non connu et donc non traité.') 
+
+def setEx(ex):
+	"""écrit les informations de début d'exercice"""
+	title = ex['eSText']
+	pdf.cell(0, 10, title, border, 1, align='C')
 
 def setBody(copyID, lenCopyId):
 	"""rempli le corps de la copie"""
@@ -123,12 +126,13 @@ def setBody(copyID, lenCopyId):
 		for q in questions :
 			y = pdf.get_y()
 			id_Q = q['idQ']
-			setQuestion(q, id_Ex, id_Q)
-			if y > pdf.get_y(): #permet de mettre les marqueurs sur chaque page
+			new_page = setQuestion(q, id_Ex, id_Q)
+			if new_page == True or y > pdf.get_y(): #permet de mettre les marqueurs sur chaque page
+				x, y = pdf.get_x(), pdf.get_y()
 				nb_page = nb_page+1
 				setCopyID(copyID, lenCopyId)
 				setMarker()
-				
+				pdf.set_xy(x, y)
 
 def setstudentId(studentId):
 	"""permettra de mettre les cases nécessaire au numéro étudiant"""
