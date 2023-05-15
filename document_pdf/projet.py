@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import fpdf
 import json
+import sys
 
 #variables globales
 nb_page = 0
@@ -32,11 +33,11 @@ def setMCQ_1pN(q, type_q, id_Ex, id_Q):
 		pdf.add_page()
 	pdf.multi_cell(0, 8, qStatement, border, align='L')
 	if 'media' in q:
-		if ((q["numberOfAnswers"]+1) * 8 + pdf.get_y() + q['media']['Media'][0]['height'] > 287):
+		if ((q["numberOfAnswers"]+1) * 8 + pdf.get_y() + q['media'][0]['height'] > 287):
 			pdf.add_page()
-			setMedia(q['media']['Media'][0])
+			setMedia(q['media'][0])
 	#accéder aux réponses
-	answers = q['answers']['Answer']
+	answers = q['answers']
 	for a in answers :
 		id_A = a['answerId']
 		setAnswerMCQ_1pN(a, type_q, id_Ex, id_Q, id_A)
@@ -46,7 +47,7 @@ def setMultipleTF(q, id_Ex, id_Q):
 	pdf.cell(0, 10, qStatement, border, 1, align='L')
 	pdf.cell(8, 4, 'T', border, 0, align='C')
 	pdf.cell(8, 4, 'F', border, 1, align='C')
-	for mtf in q["mtfs"]["Mtfs"]:
+	for mtf in q["answers"]:
 		id_A = mtf['answerId']
 		x, y = pdf.get_x(), pdf.get_y()
 		pdf.rect(x+x_offset, y+y_offset, rect_size, rect_size)
@@ -81,9 +82,9 @@ def setMarker():
 	pdf.image("./marqueur.jpg", 5, 287, 5)
 	pdf.image("./marqueur.jpg", 200, 287, 5)
 	liste_coordonnees.append(("Marker", 5, 5, 10, 10, "m"+str(0),0,0))
-	liste_coordonnees.append(("Marker", 5, 5, 10, 10, "m"+str(1),0,0))
-	liste_coordonnees.append(("Marker", 5, 5, 10, 10, "m"+str(2),0,0))
-	liste_coordonnees.append(("Marker", 5, 5, 10, 10, "m"+str(3),0,0))
+	liste_coordonnees.append(("Marker", 200, 5, 205, 10, "m"+str(1),0,0))
+	liste_coordonnees.append(("Marker", 5, 287, 10, 292, "m"+str(2),0,0))
+	liste_coordonnees.append(("Marker", 200, 287, 205, 292, "m"+str(3),0,0))
 	
 def set_nb_page(nb_page):
 	x = pdf.get_x()
@@ -111,12 +112,12 @@ def setBody(copyID, lenCopyId):
 	"""rempli le corps de la copie"""
 	global nb_page
 	#accéder aux exercices
-	exercises = exam['exercises']['Exercise']
+	exercises = exam['exercises']
 	for ex in exercises:
 		setEx(ex)
 		id_Ex = ex['exerciseId']
 		#accéder aux questions
-		questions = ex['questions']['Question']
+		questions = ex['questions']
 		for q in questions :
 			y = pdf.get_y()
 			id_Q = q['idQ']
@@ -177,14 +178,20 @@ def setHead() :
 	#ecrire ces propriétés dans le pdf
 	writtingHead(title, message, copyID, studentId, lenCopyId)
 
-def loadExam() : 
+def loadExam(nom_exam) : 
 	"""stock dans exam le JSON"""
 	global exam
-	with open('exemple.json') as mon_fichier:
+	with open(nom_exam) as mon_fichier:
 		exam = json.load(mon_fichier)
 
+def test_arg():
+	if len(sys.argv) != 3:
+		print("convention : nom_programme nom_examen_a_traduire.json nom_fichier_sorti.pdf")
+		sys.exit(1) 
+
+test_arg()
 # recupérer le json (plus tard récupérer le nom en ligne de commande)
-loadExam()
+loadExam(sys.argv[1])
 #initialiser l'en-tête de la copie
 setHead()
 #initialiser marqueur
@@ -192,12 +199,12 @@ setMarker()
 #remplir le reste de la copie
 setBody(exam.get('copyId'), exam.get('lenCopyId'))
 #renvoyer le pdf
-pdf.output(name='./output-file.pdf')
+pdf.output(name=sys.argv[2])
 
 
 #créer JSON coordonnées et remplir
 with open("coordinates.json", "w") as f:
-	f.write("[\n")
+	f.write("{[\n")
 	for types, x1, y1, x2, y2, id_Ex, id_Q, id_A in liste_coordonnees:
 		donnee = {
 			"Types": types, 
@@ -210,5 +217,5 @@ with open("coordinates.json", "w") as f:
 	# Après la boucle, nous devons supprimer la dernière virgule pour obtenir un JSON valide
 	f.seek(f.tell() - 2, 0)  # Place le curseur deux caractères avant la fin du fichier
 	f.truncate()  # Supprime les caractères restants (la dernière virgule et le saut de ligne)
-	f.write("\n]\n")
+	f.write("\n]}\n")
 
