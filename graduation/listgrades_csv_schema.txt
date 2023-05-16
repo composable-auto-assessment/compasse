@@ -1,0 +1,7 @@
+version 1.2
+// Schema of the csv showing the total grade for each student
+// Best for sharing the results with candidates
+@totalColumns 3
+student_id: notEmpty and unique
+exam_id: notEmpty 
+mark: notEmpty

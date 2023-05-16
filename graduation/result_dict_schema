@@ -1,0 +1,8 @@
+copyId:{student_id:{selected_answers:[answer1, answer2, answer3, answer4, answer5, answer6,...]}, 
+student_id:{selected_answers:[answer1, answer2, answer3,...]}}
+
+copyId{student_id:{question_id:[list of selected answers], question_id:[list of selected answers]},
+student_id:{question_id:[list of selected answers], question_id:[list of selected answers]}}
+
+{student_id:{copyId:value, question_id:[list of selected answers], question_id:[list of selected answers]},
+student_id:{copyId:value, question_id:[list of selected answers], question_id:[list of selected answers]}}

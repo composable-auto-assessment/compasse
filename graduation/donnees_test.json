@@ -1,0 +1,62 @@
+{
+    "Exam": {
+        "name": "Exam test",
+        "mark": 20,
+        "Questions": [
+            {
+                "Question": {
+                    "name": "Question test",
+                    "mark": 10,
+                    "enonce": "Quelle est la couleur du ciel ?",
+                    "answers": [
+                        {
+                            "answer": {
+                                "value": 0,
+                                "text": "Rouge"
+                            }
+                        },
+                        {
+                            "answer": {
+                                "value": 0,
+                                "text": "Vert"
+                            }
+                        },
+                        {
+                            "answer": {
+                                "value": 20,
+                                "text": "Bleu"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "Question": {
+                    "name": "Question test",
+                    "mark": 10,
+                    "enonce": "|x| = 2, combien vaut x ?",
+                    "answers": [
+                        {
+                            "answer": {
+                                "value": 5,
+                                "text": "2"
+                            }
+                        },
+                        {
+                            "answer": {
+                                "value": 5,
+                                "text": "-2"
+                            }
+                        },
+                        {
+                            "answer": {
+                                "value": -2.5,
+                                "text": "1"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

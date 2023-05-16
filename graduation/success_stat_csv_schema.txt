@@ -1,0 +1,8 @@
+version 1.2
+@totalColumns 4
+/*Schema for a CSV file showing proportion of the different answers per questions
+Useful for observing the success on each question*/
+question_id: notEmpty and unique
+exam_id: notEmpty 
+number_of_good_answer: notEmpty and range(0,*)
+number_of_wrong_answer: notEmpty and range(0,*)
