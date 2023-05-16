@@ -1,0 +1,191 @@
+{
+    "title": "Exam test",
+    "examId": 7512468,
+
+    "maxScore": 20.0,
+    "numberOfExercises": 2,
+    "message": "Ceci est un examen pour tester la structure de données définie dans le projet",
+    "exercises": {
+        "Exercise": [
+            {
+                "maxScoreExercise": 10.0,
+                "eSText": "Ceci est le premier exercice",
+                "numberOfQuestions": 3,
+                "exerciseId": 10,
+                "qOrganization": false,
+                "questions": {
+                    "Question": [
+                        {
+                            "maxScoreQuestion": 2.5,
+                            "minScoreQuestion": 0.0,
+                            "qStatement": "Choisissez les nombres supérieurs à 3",
+                            "idQ": 1,
+                            "numberOfAnswers": 3,
+                            "questionType": "MCQ",
+                            "answers": {
+                                "Answer": [
+                                    {
+                                        "answerLabel": "3,000000001",
+                                        "score": 1.75,
+                                        "answerId": 1
+                                    },
+                                    {
+                                        "answerLabel": "2,999",
+                                        "score": -1.75,
+                                        "answerId": 2
+                                    },
+                                    {
+                                        "answerLabel": "3,001",
+                                        "score": 1.75,
+                                        "answerId": 3
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "maxScoreQuestion": 2.5,
+                            "minScoreQuestion": 0.0,
+                            "qStatement": "Combien font 2+2 ?",
+                            "idQ": 2,
+                            "numberOfAnswers": 4,
+                            "questionType": "1parmiN",
+                            "answers": {
+                                "Answer": [
+                                    {
+                                        "answerLabel": "0",
+                                        "score": 0,
+                                        "answerId": 1
+                                    },
+                                    {
+                                        "answerLabel": "1",
+                                        "score": 0,
+                                        "answerId": 2
+                                    },
+                                    {
+                                        "answerLabel": "4",
+                                        "score": 2.5,
+                                        "answerId": 3
+                                    },
+                                    {
+                                        "answerLabel": "2",
+                                        "score": 0,
+                                        "answerId": 3
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "maxScoreQuestion": 5.0,
+                            "minScoreQuestion": 0.0,
+                            "qStatement": "Indiquez les valeurs sqrt(4)",
+                            "idQ": 1,
+                            "numberOfAnswers": 4,
+
+                            "questionType": "MCQ",
+                            "answers": {
+                                "Answer": [
+                                    {
+                                        "answerLabel": "-2",
+                                        "score": 2.5,
+                                        "answerId": 1
+                                    },
+                                    {
+                                        "answerLabel": "-3",
+                                        "score": -2.5,
+                                        "answerId": 2
+                                    },
+                                    {
+                                        "answerLabel": "2",
+                                        "score": 2.5,
+                                        "answerId": 3
+                                    },
+                                    {
+                                        "answerLabel": "0",
+                                        "score": -2.5,
+                                        "answerId": 2
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "maxScoreExercise": 10.0,
+                "eSText": "Ceci est le 2nd exercice",
+                "numberOfQuestions": 2,
+                "exerciseId": 20,
+                "qOrganization": false,
+                "questions": {
+                    "Question": [
+                        {
+                            "maxScoreQuestion": 5.0,
+                            "minScoreQuestion": 0.0,
+                            "qStatement": "Combien y a-t-il de feux sur cette image ?",
+                            "idQ": 1,
+                            "numberOfAnswers": 4,
+
+                            "media": {
+                                
+                            },
+                            "questionType": "1parmiN",
+                            "answers": {
+                                "Answer": [
+                                    {
+                                        "answerLabel": "2",
+                                        "score": 0,
+                                        "answerId": 1
+                                    },
+                                    {
+                                        "answerLabel": "0",
+                                        "score": 0,
+                                        "answerId": 2
+                                    },
+                                    {
+                                        "answerLabel": "1",
+                                        "score": 5,
+                                        "answerId": 3
+                                    },
+                                    {
+                                        "answerLabel": "3",
+                                        "score": 0,
+                                        "answerId": 4
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "maxScoreQuestion": 5,
+                            "minScoreQuestion": 0.0,
+                            "qStatement": "Quelle est la couleur de ce feu ?",
+                            "idQ": 2,
+                            "numberOfAnswers": 4,
+                            "questionType": "1parmiN",
+                            "answers": {
+                                "Answer": [
+                                    {
+                                        "answerLabel": "Orange",
+                                        "score": 0,
+                                        "answerId": 1
+                                    },
+                                    {
+                                        "answerLabel": "Vert",
+                                        "score": 5,
+                                        "answerId": 2
+                                    },
+                                    {
+                                        "answerLabel": "Rouge",
+                                        "score": 0,
+                                        "answerId": 3
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "lenStudentId": 8,
+    "copyId": "00000001"
+}
