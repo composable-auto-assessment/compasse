@@ -208,7 +208,7 @@ pdf.output(name=sys.argv[2])
 
 #créer JSON coordonnées et remplir
 with open("coordinates.json", "w") as f:
-	f.write("{[\n")
+	f.write("[\n")
 	for types, x1, y1, x2, y2, id_Ex, id_Q, id_A in liste_coordonnees:
 		donnee = {
 			"Types": types, 
@@ -221,5 +221,5 @@ with open("coordinates.json", "w") as f:
 	# Après la boucle, nous devons supprimer la dernière virgule pour obtenir un JSON valide
 	f.seek(f.tell() - 2, 0)  # Place le curseur deux caractères avant la fin du fichier
 	f.truncate()  # Supprime les caractères restants (la dernière virgule et le saut de ligne)
-	f.write("\n]}\n")
+	f.write("\n]\n")
 
