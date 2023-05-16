@@ -61,23 +61,19 @@ def setMedia(media):
 
 def setMCQ_1pN(q, type_q, id_Ex, id_Q):
 	"""ecrit la question (et le media) pour le type 1 parmi N et QCM"""
-	new_page = False
 	qStatement = q['qStatement']
 	if ((q["numberOfAnswers"]+1) * 8 + pdf.get_y() > 287): #si on n'a pas toutes les réponses sur la même page on change de page
 		pdf.add_page()
-		new_page = True
 	pdf.multi_cell(0, 8, qStatement, border, align='L')
 	if 'media' in q:
 		if ((q["numberOfAnswers"]+1) * 8 + pdf.get_y() + q['media'][0]['height'] > 287): #on garde groupé l'image avec les réponses et donc change de page si besoin
 			pdf.add_page()
-			new_page = True
 		setMedia(q['media'][0])
 	#accéder aux réponses
 	answers = q['answers']
 	for a in answers :
 		id_A = a['answerId']
 		setAnswerMCQ_1pN(a, type_q, id_Ex, id_Q, id_A)
-	return new_page
 
 def setMultipleTF(q, id_Ex, id_Q):
 	"""ecrit les question et réponses pour le type multiple true false"""
@@ -100,7 +96,7 @@ def setQuestion(q, id_Ex, id_Q):
 	type_q = q['questionType']
 	#version trop vieille de python pour case
 	if type_q=='MCQ' or type_q=='1parmiN':
-		return setMCQ_1pN(q, type_q, id_Ex, id_Q)
+		setMCQ_1pN(q, type_q, id_Ex, id_Q)
 	elif type_q=='multipleTF' :
 		setMultipleTF(q, id_Ex, id_Q)
 	elif type_q=='tableau' :
@@ -127,7 +123,7 @@ def setBody(copyID, lenCopyId):
 			y = pdf.get_y()
 			id_Q = q['idQ']
 			new_page = setQuestion(q, id_Ex, id_Q)
-			if new_page == True or y > pdf.get_y(): #permet de mettre les marqueurs sur chaque page
+			if nb_page+1 != pdf.page_no(): #permet de mettre les marqueurs sur chaque page
 				x, y = pdf.get_x(), pdf.get_y()
 				nb_page = nb_page+1
 				setCopyID(copyID, lenCopyId)
@@ -208,7 +204,7 @@ pdf.output(name=sys.argv[2])
 
 #créer JSON coordonnées et remplir
 with open("coordinates.json", "w") as f:
-	f.write("[\n")
+	f.write("{\n\"information\":[\n")
 	for types, x1, y1, x2, y2, id_Ex, id_Q, id_A in liste_coordonnees:
 		donnee = {
 			"Types": types, 
@@ -221,5 +217,5 @@ with open("coordinates.json", "w") as f:
 	# Après la boucle, nous devons supprimer la dernière virgule pour obtenir un JSON valide
 	f.seek(f.tell() - 2, 0)  # Place le curseur deux caractères avant la fin du fichier
 	f.truncate()  # Supprime les caractères restants (la dernière virgule et le saut de ligne)
-	f.write("\n]\n")
+	f.write("\n]\n}\n")
 
