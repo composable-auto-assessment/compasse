@@ -4,28 +4,33 @@
     "title": "coordinates ",
     "description": "coordinates with types, id ",
     "type": "object",
-    "properties": [
-        "description": "The list of information about the boxes",
-        "type": "array",
-        "items": {
-            "Types:"{
-                "description": "Type of the information (CopyId, Page_ID, id StudendId, MCQ, Marker, 1parmiN, mtf)",
-                "type": "string"
-            },
-            "Coordinates:"{
-                "description": "coordinates of the boxe: array of [[x1, y1], [x2, y2 ]])",
-                "type": "object",
-                "properties": {
-                    "x1": {"type": "number"},
-                    "y1": {"type": "number"},
-                    "x2": {"type": "number"},
-                    "y2": {"type": "number"}
-                },
-            },
-            "id:"{
-                "description": "id exercise, question, answer, if marker, m1 to m4, if studentId, s0 to s9 for the value",
-                "type": ["integer", "string"]
+    "properties": { 
+        "information": {
+            "description": "The list of information about the boxes",
+            "type": "array",
+            "items": {
+                "type":"object",
+                "properties":{
+                    "Types":{
+                        "description": "Type of the information (CopyId, Page_ID, id StudendId, MCQ, Marker, 1parmiN, mtf)",
+                        "type": "string"
+                    },
+                    "Coordinates":{
+                        "description": "coordinates of the boxe: array of [[x1, y1], [x2, y2 ]])",
+                        "type": "object",
+                        "properties": {
+                            "x1": {"type": "number"},
+                            "y1": {"type": "number"},
+                            "x2": {"type": "number"},
+                            "y2": {"type": "number"}
+                        }
+                    },
+                    "id":{
+                        "description": "id exercise, question, answer, if marker, m1 to m4, if studentId, s0 to s9 for the value",
+                        "type": ["integer", "string"]
+                    }
+                }                
             }
         }
-    ]
+    }
 }
