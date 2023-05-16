@@ -2,14 +2,19 @@ import csv
 import random
 import statistics
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 import json
 
 ################### Constant ###################
 
-SUCCESS_STATS_COLUMNS = [
+SUCCESS_QUESTION_STATS_COLUMNS = [
     "question_id",
+    "exam_id",
+    "number_of_good_answer",
+    "number_of_wrong_answer",
+]
+SUCCESS_EXERCISE_STATS_COLUMNS = [
+    "exercise_id",
     "exam_id",
     "number_of_good_answer",
     "number_of_wrong_answer",
@@ -27,7 +32,7 @@ def readJSON(filename):
 
 def questionsList(filename):
     """Function reading an exam following the JSON Schema to catch the
-    question_id with its answers
+    question_id with its answers and the score for each answer
     IN : string of the filename
     OUT : list of question id"""
     with open(filename, "r") as f:
@@ -55,20 +60,19 @@ def minScoreQuestion(exam, id):
 
 def answerReading(parsingResult, filename):
     """Function reading the answers found in the parsing result, and matching with
-    the exam to generate the exam
-
+    the exam to generate a tuple with the grades per student and the number of bad
+    and good answers per question for each exercise.
     PARAMETERS
     -------
     parsingresult : dictionary
-        ???? #TODO Explain
+        dictionary following the schema defined for parsing result
     filename : string
         path of the file of the exam
-    IN : dictionary of the parsingResult, ?????
-    OUT : Tuple of grades per student and proportions of good and bad answers per question
     """
     # preparation of dictionaries for results
     counters = {}
     grades = {}
+    scores = {}
     questions = questionsList(filename)
     exam = readJSON(filename)
     for i in parsingResult:
@@ -79,9 +83,11 @@ def answerReading(parsingResult, filename):
             counters[j["exerciseId"]][k["idQ"]] = {}
             counters[j["exerciseId"]][k["idQ"]]["gAnswers"] = 0
             counters[j["exerciseId"]][k["idQ"]]["bAnswers"] = 0
+    # processing
     for i in parsingResult:
         student = i["studentId"]
         score = 0
+        scores[student] = {}
         for id in i["questions"]:
             for ex in counters:
                 for q in counters[ex]:
@@ -100,11 +106,12 @@ def answerReading(parsingResult, filename):
                                 else:
                                     counters[ex][id]["gAnswers"] += 1
                         if scoreAnswers < min:
-                            score += min
-                        else:
-                            score += scoreAnswers
+                            scoreAnswers = min
+                        score += scoreAnswers
+                        scores[student][id] = scoreAnswers
+
         grades[student] = score
-    return (grades, counters)
+    return (grades, counters, scores)
 
 
 ################### Graduation ###################
@@ -128,6 +135,24 @@ def gradesv1(parsing_result, filename):
 
 
 ################### Statistics ###################
+
+
+def successByExercise(success):
+    """Function creating the dictionary of success for each exercise
+    PARAMETERS
+    -------
+    success: dictionary
+        dictionary representing the success for each question of each exercise
+        2nd object of the tuple result of the function answerReading"""
+    res = {}
+    for ex in success:
+        res[ex] = {}
+        res[ex]["gAnswers"] = 0
+        res[ex]["bAnswers"] = 0
+        for q in success[ex]:
+            res[ex]["gAnswers"] += success[ex][q]["gAnswers"]
+            res[ex]["bAnswers"] += success[ex][q]["bAnswers"]
+    return res
 
 
 ################### Chart generator ###################
@@ -159,24 +184,58 @@ def bar_chart_by_grades(grades, max_score):
 ################### CSV generator ###################
 
 
-def write_graduation(dict):
+def write_list_graduation(dict, exam_id):
     """Function generating a csv file of the grades per questions for every student
     IN : dictionary of the score per questions for each student id
     OUT : None
     SIDE EFFECT : creatin and/or writing a csv file of the score per questions for each student id
     """
-
-    # dict -> {student_id:{question_id:mark, question_id:mark}}
-    fields = ["Student"] + list(dict[0])
-    with open("graduation.csv", "w", newline="") as f:
-        writer = csv.DictWriter(f, fields)
+    with open("listgrades.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=LISTGRADES_COLUMNS)
         for i in dict:
-            writer.writerow({"Student": i} + dict[i])
+            writer.writerow(
+                {
+                    LISTGRADES_COLUMNS[0]: i,
+                    LISTGRADES_COLUMNS[1]: exam_id,
+                    LISTGRADES_COLUMNS[2]: dict[i],
+                }
+            )
+
+
+def write_success_question(dict, exam_id):
+    with open("successquestion.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=SUCCESS_QUESTION_STATS_COLUMNS)
+        for ex in dict:
+            for q in dict[ex]:
+                writer.writerow(
+                    {
+                        SUCCESS_QUESTION_STATS_COLUMNS[0]: q,
+                        SUCCESS_QUESTION_STATS_COLUMNS[1]: exam_id,
+                        SUCCESS_QUESTION_STATS_COLUMNS[2]: dict[ex][q]["gAnswers"],
+                        SUCCESS_QUESTION_STATS_COLUMNS[3]: dict[ex][q]["bAnswers"],
+                    }
+                )
+
+
+def write_success_exercise(dict, exam_id):
+    dict = successByExercise(dict)
+    with open("successexercise.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=SUCCESS_EXERCISE_STATS_COLUMNS)
+        for ex in dict:
+            writer.writerow(
+                {
+                    SUCCESS_EXERCISE_STATS_COLUMNS[0]: ex,
+                    SUCCESS_EXERCISE_STATS_COLUMNS[1]: exam_id,
+                    SUCCESS_EXERCISE_STATS_COLUMNS[2]: dict[ex]["gAnswers"],
+                    SUCCESS_EXERCISE_STATS_COLUMNS[3]: dict[ex]["bAnswers"],
+                }
+            )
 
 
 ################### Producing testing data ###################
-exam_json = "./examtest.json"
+exam_json = ".\examtest.json"
 exam = readJSON(exam_json)
+
 # current_exam = questionsList(exam_json)
 
 # res_parsing = []
@@ -214,5 +273,6 @@ exam = readJSON(exam_json)
 # bar_chart_by_grades(test_grades, 20)
 
 result = answerReading(readJSON("./res_parsing_test.json"), exam_json)
-print(result[0])
-bar_chart_by_grades(result[0], exam["maxScore"])
+write_list_graduation(result[0], exam["examId"])
+write_success_question(result[1], exam["examId"])
+write_success_exercise(result[1], exam["examId"])
