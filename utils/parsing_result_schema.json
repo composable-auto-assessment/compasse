@@ -1,0 +1,40 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "#",
+    "title": "Parsing result",
+    "description": "Structure of the parsing result for one copy",
+    "type": "object",
+    "properties": {
+        "examId": {
+            "title": "Exam ID",
+            "description": "ID of the exam of this copy",
+            "type": "string"
+        },
+        "studentId": {
+            "title": "Student ID",
+            "description": "ID of the student who answered on this copy",
+            "type": "string"
+        },
+        "questions": {
+            "title": "Questions",
+            "description": "List of the questions answered on the copy",
+            "type": "array",
+            "items": {
+                "properties": {
+                    "questionID": {
+                        "title": "Question ID",
+                        "description": "ID of the question",
+                        "type": "string"
+                    },
+                    "answers": {
+                        "items": {
+                            "title": "Answer ID",
+                            "description": "ID of the selected answer",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

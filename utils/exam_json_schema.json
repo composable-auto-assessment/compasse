@@ -1,0 +1,315 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "#",
+    "title": "Exam",
+    "description": "An exam with exercises, and a mark",
+    "type": "object",
+    "properties": {
+        "title": {
+            "description": "The title of the exam",
+            "type": "string"
+        },
+        "examId": {
+            "description": "The id of the exam",
+            "type": "integer"
+        },
+        "maxScore": {
+            "description": "Maximum score for the exam",
+            "type": "float",
+            "exclusiveMinimum": 0.0
+        },
+        "numberOfExercises": {
+            "description": "The number of exercises in the exam",
+            "type": "integer"
+        },
+        "message": {
+            "description": "The message to display at the beginning of the exam",
+            "type": "string"
+        },
+        "margins": {
+            "description": "The margin for the page following the structure [Top, Bottom, Left, Right]. Each margin is in millimeters",
+            "type": "array",
+            "items": {
+                "type": "float"
+            }
+        },
+        "exercises": {
+            "description": "The list of exercises of the exam",
+            "type": "array",
+            "items": {
+                "title": "Exercise",
+                "description": "An exercise is a set of questions, with a Maximum score",
+                "type": "object",
+                "properties": {
+                    "maxScoreExercise": {
+                        "description": "Maximum score for the exercise exam",
+                        "type": "float",
+                        "exclusiveMinimum": 0.0
+                    },
+                    "concept": {
+                        "description": "Concept addressed in the exercise",
+                        "type": "string"
+                    },
+                    "eSText": {
+                        "description": "The text of the exercise statement",
+                        "type": "string"
+                    },
+                    "numberOfQuestions": {
+                        "description": "Number of questions in the exercise",
+                        "type": "integer"
+                    },
+                    "exerciseId": {
+                        "description": "Id of the exercise",
+                        "type": "integer"
+                    },
+                    "qOrganization": {
+                        "description": "TODO",
+                        "type": "boolean"
+                    },
+                    "questions": {
+                        "description": "Array of the questions of the exercise",
+                        "type": "array",
+                        "items": {
+                            "question": {
+                                "title": "Question",
+                                "description": "A question is a text with a set of answers, a maximum and minimum score",
+                                "type": "object",
+                                "properties": {
+                                    "maxScoreQuestion": {
+                                        "description": "Maximum score for the question",
+                                        "type": "float"
+                                    },
+                                    "minScoreQuestion": {
+                                        "description": "Minimum score for the question",
+                                        "type": "float"
+                                    },
+                                    "qStatement": {
+                                        "description": "Question Statement",
+                                        "type": "string"
+                                    },
+                                    "qConcept": {
+                                        "description": "Concept addressed in the question",
+                                        "type": "string"
+                                    },
+                                    "idQ": {
+                                        "description": "Id of the question",
+                                        "type": "integer"
+                                    },
+                                    "numberOfAnswers": {
+                                        "description": "Number of answers for the question",
+                                        "type": "integer"
+                                    },
+                                    "questionType": {
+                                        "description": "Type of question",
+                                        "type": "string"
+                                    },
+                                    "answers": {
+                                        "description": "Array of answers for the question",
+                                        "type": "array",
+                                        "items": {
+                                            "title": "Answer",
+                                            "type": "object",
+                                            "description": "One of the answers for the question",
+                                            "properties": {
+                                                "answerLabel": {
+                                                    "description": "Text of the answer",
+                                                    "type": "string"
+                                                },
+                                                "score": {
+                                                    "description": "score of the answer",
+                                                    "type": "float"
+                                                },
+                                                "answerId": {
+                                                    "description": "Id of the answer",
+                                                    "type": "integer"
+                                                },
+                                                "isTrust": {
+                                                    "title": "Trust index presence",
+                                                    "description": "Show the presence of a trust index for the answer",
+                                                    "type": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "label",
+                                                "score",
+                                                "answerId"
+                                            ]
+                                        }
+                                    },
+                                    "media": {
+                                        "description": "List of the media for the question",
+                                        "type": "array",
+                                        "items": {
+                                            "title": "Media",
+                                            "description": "Media for the question",
+                                            "type": "object",
+                                            "properties": {
+                                                "mediaTitle": {
+                                                    "description": "Title of the media",
+                                                    "type": "string"
+                                                },
+                                                "path": {
+                                                    "description": "Path to the media",
+                                                    "type": "string"
+                                                },
+                                                "width": {
+                                                    "description": "Width of the media in millimeters",
+                                                    "type": "integer"
+                                                },
+                                                "height": {
+                                                    "description": "Height of the media in millimeters",
+                                                    "type": "integer"
+                                                },
+                                                "mediaAlignment": {
+                                                    "description": "Alignment of the media",
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "maxScoreQuestion",
+                                    "minScoreQuestion",
+                                    "statement",
+                                    "idQ",
+                                    "numberOfAnswers",
+                                    "answers"
+                                ]
+                            },
+                            "mtf": {
+                                "title": "Multiple True False",
+                                "description": "TODO",
+                                "type": "object",
+                                "properties": {
+                                    "maxScoreQuestion": {
+                                        "description": "Maximum score for each question",
+                                        "type": "float"
+                                    },
+                                    "minScoreQuestion": {
+                                        "description": "Minimum score for each question",
+                                        "type": "float"
+                                    },
+                                    "qStatement": {
+                                        "description": "Question Statement",
+                                        "type": "string"
+                                    },
+                                    "qConcept": {
+                                        "description": "Concept addressed in the question",
+                                        "type": "string"
+                                    },
+                                    "idQ": {
+                                        "description": "Id of the question",
+                                        "type": "integer"
+                                    },
+                                    "numberOfAnswers": {
+                                        "description": "Number of answers for the question",
+                                        "type": "integer"
+                                    },
+                                    "questionType": {
+                                        "description": "Type of question",
+                                        "type": "string"
+                                    },
+                                    "answers": {
+                                        "description": "Array of questions with True-False choices",
+                                        "type": "array",
+                                        "items": {
+                                            "title": "Question TF",
+                                            "type": "object",
+                                            "description": "One of the question for the MTF",
+                                            "properties": {
+                                                "qTFLabel": {
+                                                    "description": "Text of the question",
+                                                    "type": "string"
+                                                },
+                                                "answer": {
+                                                    "description": "The correct answer",
+                                                    "type": "boolean"
+                                                },
+                                                "answerId": {
+                                                    "description": "Id of the answer",
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "required": [
+                                                "qTFLabel",
+                                                "answer",
+                                                "answerId"
+                                            ]
+                                        }
+                                    },
+                                    "media": {
+                                        "description": "List of the media for the question",
+                                        "type": "array",
+                                        "items": {
+                                            "title": "Media",
+                                            "description": "Media for the question",
+                                            "type": "object",
+                                            "properties": {
+                                                "mediaTitle": {
+                                                    "description": "Title of the media",
+                                                    "type": "string"
+                                                },
+                                                "path": {
+                                                    "description": "Path to the media",
+                                                    "type": "string"
+                                                },
+                                                "width": {
+                                                    "description": "Width of the media in millimeters",
+                                                    "type": "integer"
+                                                },
+                                                "height": {
+                                                    "description": "Height of the media in millimeters",
+                                                    "type": "integer"
+                                                },
+                                                "mediaAlignment": {
+                                                    "description": "Alignment of the media",
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "maxScoreQuestion",
+                                    "minScoreQuestion",
+                                    "statement",
+                                    "idQ",
+                                    "numberOfAnswers",
+                                    "answers"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "maxScoreExercise",
+                    "questions",
+                    "numberOfQuestions",
+                    "exerciseId",
+                    "exerciseStatement"
+                ]
+            }
+        },
+        "lenStudentId": {
+            "description": "Lenght of the student number",
+            "type": "integer"
+        },
+        "copyId": {
+            "description": "Copy identifier",
+            "type": "string"
+        },
+        "lenCopyId": {
+            "description": "Lenght of the Copy identifier",
+            "type": "integer"
+        }
+    },
+    "required": [
+        "title",
+        "maxScore",
+        "numberOfExercises",
+        "exercises",
+        "examId",
+        "copyId"
+    ]
+}
