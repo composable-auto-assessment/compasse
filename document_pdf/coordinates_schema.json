@@ -16,7 +16,7 @@
                         "type": "string"
                     },
                     "Coordinates":{
-                        "description": "coordinates of the boxe: array of [[x1, y1], [x2, y2 ]])",
+                        "description": "coordinates of the boxe",
                         "type": "object",
                         "properties": {
                             "x1": {"type": "number"},
@@ -27,7 +27,12 @@
                     },
                     "id":{
                         "description": "id exercise, question, answer, if marker, m1 to m4, if studentId, s0 to s9 for the value",
-                        "type": ["integer", "string"]
+                        "type": "object",
+                        "properties": {
+                            "id_Ex": {"type": ["integer", "string"]},
+                            "id_Q": {"type": ["integer", "string"]},
+                            "id_A": {"type": ["integer", "string"]},
+                        }
                     }
                 }                
             }
