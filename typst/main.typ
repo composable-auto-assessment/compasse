@@ -2,9 +2,64 @@
 #place(top+left, dx : -60pt, dy : -60pt, square(size: 10pt, fill : black))
 #place(bottom+right, dx : 60pt, dy : 60pt, square(size: 10pt, fill : black))
 
-/* Logo */
+/* Grille numéro étudiant 
+La fonction id_etudiant génère une grille de 8 colonnes et de 10 lignes */
+
+#let id_etudiant() = [
+  #let colonne_cases() =[
+    #let i = 0
+    #while i < 10 {
+      square(size: 3pt, outset: 4pt)
+      i=i+1
+    }
+    ]
+
+  #let colonne_chiffre() = [
+    #let i = 0
+    #while i < 10 {
+      [#i]
+      linebreak() 
+      v(-4.5pt)
+      i=i+1
+    }
+  ]
+  #box()[
+      #columns(9, gutter: -300pt)[
+      #colonne_chiffre()
+      #colbreak()
+      #let n=0
+      #while n < 8{
+        colonne_cases()
+        colbreak()
+        n=n+1
+      } 
+    ]
+  ]
+]
 
 
+/* Logo
+- Importer un logo sous l'appelation "Logo.png"
+*/
+
+#let logo(taille)=[
+  #if taille == "grand"{
+    image("Logo.png", width: 100%)
+  }
+  else if taille == "moyen grand"{
+    image("Logo.png", width: 75%)
+  }
+  else if taille == "moyen"{
+    image("Logo.png", width: 50%)
+  }
+  else if taille == "moyen petit"{
+    image("Logo.png", width: 25%)
+  }
+  else if taille == "petit"{
+    image("Logo.png", width: 0%)
+  }
+  
+]
 /* Une fonction pour tout
 - type_q : type de la question (multiple true false, 1 parm N...)
 - type_a : type d'affichage : afficher les réponses en sautant une ligne = "saut"
@@ -20,14 +75,17 @@
   else if type_q == "1parmiN"{
     [_une seule réponse est juste_]
   }
+   else if type_q == "multipleTF"{
+    [_plusieurs réponses peuvent être justes_]
+  }
 
   /* type d'affichage */
-  #if type_a == "suite"{
+  #if type_a == "a_la_suite"{
      columns( q.numberOfAnswers, gutter : -200pt)[
         #let nOA = q.numberOfAnswers
         #align(center)[
           /* Pour chaque réponse */
-          #for a in q.answers.Answer {
+          #for a in q.answers {
             block()[#v(5pt)#a.answerLabel
             #align(center)[#box(square(size : 10pt))]
             ]
@@ -40,7 +98,7 @@
         ]]
   }
   else{
-    for a in q.answers.Answer [
+    for a in q.answers [
       #box(square(size : 10pt)) #h(8pt) #a.answerLabel
       #v(2pt)
     ]
@@ -49,27 +107,30 @@
 
 ]
 
-#let forecast(exam) =[
-  #columns(2, gutter: 2.5cm)[#rect(width: 7cm, height: 2cm, inset: 11pt)[#set text( size: 13pt)
-  Nom : 
-  
-  Prenom : ]
-  #colbreak()
-  #rect(width: 7cm, height: 2cm, inset : 11pt)[#set text(size : 13pt)
-  Numéro Étudiant :]]
-  #v(20pt)
+/* Presentation() affiche les premiers éléments indispendables pour identifier une copie */
+
+#let presentation(exam)=[
+  #place(top+left, dx : 0pt, dy : -10pt)[#logo("moyen petit")]
+  #place(top+right, dx : 0pt, dy : -10pt)[Numéro Étudiant #v(0pt) #id_etudiant()]
+  #place(top+left, dx : 10pt, dy : 1.8cm)[
+  #rect(width: 7cm, height: 3cm, inset: 11pt)[Nom : #v(15pt) Prenom :]]
+  #v(7cm)
   #set heading(numbering:"1.") //Numérotation
   // Espace identifiant étudiant
   #underline[*#align(center, text(size : 15pt, exam.title))*] //Titre
   #place(top+right, dx : 50pt, dy : -50pt, [#rect[#exam.examId]]) //Identifiant
+]
+
+#let forecast(exam) =[    
+  #presentation(exam)
   /* Parcourir chaque exercice */
-  #for ex in exam.exercises.Exercise {
+  #for ex in exam.exercises {
     block()
       [#align(center)[#rect[= #upper[#text(size : 13pt, "Exercice")]]]//Titre de l'exercice
       #align(center)[#ex.eSText] //Énoncé de l'exercice
       #v(15pt)
       /* Parcourir chaque question */
-      #for q in ex.questions.Question {
+      #for q in ex.questions {
           [== #q.qStatement]
           affichage_question(q.questionType, "saut", q)
       }
@@ -77,4 +138,7 @@
   }
 ]
 
-#forecast(json("examtest.json"))
+#forecast(json("exemple.json"))
+
+
+
