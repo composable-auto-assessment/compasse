@@ -17,6 +17,7 @@
                     "minScoreQuestion": 0.0,
                     "qStatement": "Choisissez les nombres supérieurs à 3",
                     "idQ": "E1Q1",
+                    "qConcept": "A",
                     "numberOfAnswers": 3,
                     "questionType": "MCQ",
                     "answers": [
@@ -42,6 +43,7 @@
                     "minScoreQuestion": 0.0,
                     "qStatement": "Combien font 2+2 ?",
                     "idQ": "E1Q2",
+                    "qConcept": "A",
                     "numberOfAnswers": 4,
                     "questionType": "1parmiN",
                     "answers": [
@@ -72,6 +74,7 @@
                     "minScoreQuestion": 0.0,
                     "qStatement": "Indiquez les valeurs sqrt(4)",
                     "idQ": "E1Q3",
+                    "qConcept": "B",
                     "numberOfAnswers": 4,
                     "questionType": "MCQ",
                     "answers": [
@@ -102,6 +105,7 @@
                     "minScoreQuestion": 0.0,
                     "qStatement": "Test multiple, on va vous poser plusieurs questions et vous cocherez soit T pour vrai, \nsoit F pour faux. Bon courage à vous",
                     "idQ": "E1Q4",
+                    "qConcept": "B",
                     "numberOfAnswers": 4,
                     "questionType": "multipleTF",
                     "answers": [
@@ -141,13 +145,14 @@
                     "minScoreQuestion": 0.0,
                     "qStatement": "Combien y a-t-il de feux sur cette image ?",
                     "idQ": "E2Q1",
+                    "qConcept": "C",
                     "numberOfAnswers": 3,
                     "media": [
                         {
-                        "path":"./feux_tri.jpeg",
-                        "width":10,
-                        "height": 10,
-                        "mediaAlignment":"C"
+                            "path": "./feux_tri.jpeg",
+                            "width": 10,
+                            "height": 10,
+                            "mediaAlignment": "C"
                         }
                     ],
                     "questionType": "1parmiN",
@@ -179,6 +184,7 @@
                     "minScoreQuestion": 0.0,
                     "qStatement": "Quelle est la couleur de ce feu ?",
                     "idQ": "E2Q2",
+                    "qConcept": "C",
                     "numberOfAnswers": 4,
                     "questionType": "1parmiN",
                     "answers": [
@@ -204,5 +210,5 @@
     ],
     "lenStudentId": 8,
     "copyId": "001010110010",
-    "lenCopyId":12
+    "lenCopyId": 12
 }
