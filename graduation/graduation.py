@@ -201,6 +201,23 @@ def bar_chart_by_grades(grades, max_score):
     plt.show()
 
 
+def graphSuccessConcept(dict, exam):
+    dict = successByConcept(dict, exam)
+    concepts = dict.keys()
+    counts = {
+        "Good answers": np.array([dict[i]["gAnswers"] for i in dict.keys()]),
+        "Wrong answers": np.array([dict[i]["bAnswers"] for i in dict.keys()]),
+    }
+    fig, ax = plt.subplots()
+    bottom = np.zeros(3)
+    for boolean, count in counts.items():
+        p = ax.bar(concepts, count, 0.5, label=boolean, bottom=bottom)
+        bottom += count
+    ax.set_title("Success by concept")
+    ax.legend(loc="upper right")
+    plt.show()
+
+
 ################### CSV generator ###################
 
 
@@ -325,3 +342,4 @@ write_success_question(result[1], exam["examId"])
 write_success_exercise(result[1], exam["examId"])
 write_success_concept(result[1], exam)
 bar_chart_by_grades(result[0], 20)
+graphSuccessConcept(result[1], exam)
