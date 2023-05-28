@@ -11,7 +11,7 @@
         },
         "examId": {
             "description": "The id of the exam",
-            "type": "integer"
+            "type": "string"
         },
         "maxScore": {
             "description": "Maximum score for the exam",
@@ -25,13 +25,6 @@
         "message": {
             "description": "The message to display at the beginning of the exam",
             "type": "string"
-        },
-        "margins": {
-            "description": "The margin for the page following the structure [Top, Bottom, Left, Right]. Each margin is in millimeters",
-            "type": "array",
-            "items": {
-                "type": "float"
-            }
         },
         "exercises": {
             "description": "The list of exercises of the exam",
@@ -60,7 +53,7 @@
                     },
                     "exerciseId": {
                         "description": "Id of the exercise",
-                        "type": "integer"
+                        "type": "string"
                     },
                     "qOrganization": {
                         "description": "TODO",
@@ -93,7 +86,7 @@
                                     },
                                     "idQ": {
                                         "description": "Id of the question",
-                                        "type": "integer"
+                                        "type": "string"
                                     },
                                     "numberOfAnswers": {
                                         "description": "Number of answers for the question",
@@ -121,7 +114,7 @@
                                                 },
                                                 "answerId": {
                                                     "description": "Id of the answer",
-                                                    "type": "integer"
+                                                    "type": "string"
                                                 },
                                                 "isTrust": {
                                                     "title": "Trust index presence",
@@ -200,7 +193,7 @@
                                     },
                                     "idQ": {
                                         "description": "Id of the question",
-                                        "type": "integer"
+                                        "type": "string"
                                     },
                                     "numberOfAnswers": {
                                         "description": "Number of answers for the question",
@@ -228,7 +221,7 @@
                                                 },
                                                 "answerId": {
                                                     "description": "Id of the answer",
-                                                    "type": "integer"
+                                                    "type": "string"
                                                 }
                                             },
                                             "required": [
