@@ -216,6 +216,7 @@ def graphSuccessConcept(dict, exam):
     ax.set_title("Success by concept")
     ax.legend(loc="upper right")
     plt.show()
+    # TODO Work with percentages
 
 
 ################### CSV generator ###################
