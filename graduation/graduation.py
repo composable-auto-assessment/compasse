@@ -4,6 +4,7 @@ import statistics
 import numpy as np
 import matplotlib.pyplot as plt
 import json
+import sys
 
 ################### Constant ###################
 
@@ -21,7 +22,14 @@ SUCCESS_EXERCISE_STATS_COLUMNS = [
 ]
 LISTGRADES_COLUMNS = ["student_id", "exam_id", "mark"]
 
+
 ################### Reading JSON ###################
+def test_arg():
+    if len(sys.argv) != 3:
+        print(
+            "convention : nom_programme nom_examen_a_traduire.json nom_fichier_res_parsing.json"
+        )
+        sys.exit(1)
 
 
 def readJSON(filename):
@@ -298,7 +306,8 @@ def write_success_concept(dict, exam):
 
 
 ################### Producing testing data ###################
-exam_json = "./utils/exemple.json"
+test_arg()
+exam_json = sys.argv[1]
 exam = readJSON(exam_json)
 
 # current_exam = questionsList(exam_json)
@@ -337,10 +346,14 @@ exam = readJSON(exam_json)
 # print(test_grades)
 # bar_chart_by_grades(test_grades, 20)
 
-result = answerReading(readJSON("./graduation/res_parsing_test.json"), exam_json)
-write_list_graduation(result[0], exam["examId"])
-write_success_question(result[1], exam["examId"])
-write_success_exercise(result[1], exam["examId"])
-write_success_concept(result[1], exam)
+parsing = sys.argv[2]
+result = answerReading(readJSON(parsing), exam_json)
+print(result[0])
+print(result[2])
+print(result[1])
+# write_list_graduation(result[0], exam["examId"])
+# write_success_question(result[1], exam["examId"])
+# write_success_exercise(result[1], exam["examId"])
+# write_success_concept(result[1], exam)
 bar_chart_by_grades(result[0], 20)
 graphSuccessConcept(result[1], exam)
