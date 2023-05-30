@@ -45,10 +45,8 @@ with open('coordinates.json') as user_file:
     bloc_hist = cv2.calcHist([bloc], [0], None, [256], [0, 256])
 
     if median(bloc_hist) <= 142:  
-      #print(type,"la case est noircie")
       liste_json.append((type, id_Ex, id_Q, id_A))
-    #else:
-      #print(type,"la case n'est pas noircie")
+
       
 with open("coordonneesSortie.json", "w") as f: 
   f.write("{\n\"Cases noircies\":[\n")
